@@ -8,6 +8,8 @@ const {notFoundHandlar, errorHandlar} = require('./middlewares/common/errorHandl
 const loginRouter = require('./router/loginRouter');
 const usersRouter = require('./router/usersRouter');
 const moviesRouter = require('./router/moviesRouter');
+const signinRouter = require('./router/signInRouter');
+const ticketRouter = require('./router/ticketRouter');
 
 const app = express();
 dotenv.config();
@@ -16,11 +18,7 @@ process.env.APP_NAME;
 
 // database contection
 
-mongoose.connect('mongodb://localhost:5000/usersdb', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000, // Optional timeout for server selection
-})
+mongoose.connect('mongodb://127.0.0.1:27017/users')
 .then(() => console.log("Database Connect Successfully"))
 .catch((err) => console.log(err));
 
@@ -36,6 +34,8 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use("/", loginRouter);
 app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);
+app.use("/signIn", signinRouter);
+app.use("/ticket", ticketRouter);
 
 
 

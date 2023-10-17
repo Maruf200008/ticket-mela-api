@@ -7,6 +7,6 @@ const {getLogin} = require('../controllers/loginControllers');
 const router = express.Router();
 
 // login page
-router.get("/", getLogin);
+router.post("/", getLogin);
 
 module.exports = router;

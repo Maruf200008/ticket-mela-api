@@ -10,7 +10,7 @@ const errorHandlar = (err, req, res, next) => {
     if (res.headersSent) {
         res.send('Something broke!')
       }else {
-        res.status(500).send('Something broke!')
+        res.status(500).send(err)
       }
     
 }

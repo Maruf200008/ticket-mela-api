@@ -1,7 +1,16 @@
+const User = require('../models/People')
 
-
-const getUser = (req, res, next) => {
-    res.status(200).send("Hi i am a user Route");
+const getUser =  async (req, res, next) => {
+    console.log(req.userName)
+    console.log(req.userId)
+     const user = await User.find({name : "Mohammad Maruf"})
+    .select({
+        _id : 0,
+        createdAt : 0,
+        updatedAt : 0,
+        __v : 0
+    })
+    res.status(200).send(user);
 }
 
 module.exports = {
