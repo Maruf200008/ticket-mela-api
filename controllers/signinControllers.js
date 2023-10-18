@@ -15,7 +15,13 @@ const createUser =  async (req, res, next) => {
     res.status(200).send(result); 
     console.log(result)
     }catch(err) {
-        res.status(500).send("Sign Up Faild!!"); 
+        res.status(500).json({
+            errors : {
+                common : {
+                    msg : "Unknown error occured!"
+                }
+            }
+        }); 
     }
     
 }

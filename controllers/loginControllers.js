@@ -1,22 +1,35 @@
 // external import 
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const createError = require("http-errors");
+
 // internal import 
 const User = require('../models/People')
 
 
 const getLogin = async (req, res, next) => {
     try {
-        const user = await User.find({ name: req.body.name });
-        if (user && user.length > 0) {
-            const isValidPassword = await bcrypt.compare(req.body.password, user[0].password);
+        const user = await User.findOne({ 
+            $or: [{email: req.body.email}, {mobile: req.body.mobile}, ],
+         });
+        if (user && user?._id) {
+            const isValidPassword = await bcrypt.compare(req.body.password, user.password);
             if (isValidPassword) {
             // genarate web token
-            const token = jwt.sign({
-                userName : user[0]?.name,
-                userId : user[0]?._id
-            }, process.env.COOKIE_SECRET, {
-                expiresIn : '1h'
+            const userObject = {
+                userName : user.name,
+                mobile : user.mobile,
+                email : user.email,
+            }
+            const token = jwt.sign(userObject, process.env.JWT_SECRET, {
+                expiresIn : process.env.JWT_EXPIRY
+            })
+
+            // set cookie
+            res.cookie(process.env.COOKIE_NAME, token, {
+                maxAge : process.env.JWT_EXPIRY,
+                httpOnly : true,
+                signed : true
             })
 
             res.status(200).json({
@@ -25,24 +38,29 @@ const getLogin = async (req, res, next) => {
             })
 
             } else {
-                res.status(401).json({
-                    error: "Authentication Failed!!"
-                });
+                throw createError("Login failed! Please try again.")
+              
             }
         } else {
-            res.status(401).json({
-                error: "Authentication Failed!!"
-            });
+            throw createError("Login failed! Please try again.")
         }
-    } catch (error) {
+    } catch (err) {
         // Handle any potential errors, e.g., database query errors
-        console.error("Error in login:", error);
         res.status(500).json({
-            error: "Internal Server Error"
-        });
+            errors : {
+                common : {
+                    msg : err.message
+                }
+            }
+        }); 
     }
 }
 
+const logOut = async(req, res, next) => {
+    res.clearCookie(process.env.COOKIE_NAME)
+    res.send("Logged Out")
+}
 module.exports = {
-    getLogin
+    getLogin,
+    logOut
 }
