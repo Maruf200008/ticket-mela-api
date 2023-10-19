@@ -1,8 +1,12 @@
 const express = require('express');
+const passport = require('passport')
 const dotenv = require('dotenv');
 const mongoose = require("mongoose");
+const cors = require('cors');
+
 const cookieParser = require('cookie-parser');
 const {notFoundHandlar, errorHandlar} = require('./middlewares/common/errorHandlar')
+require('./auth')
 
 // router 
 const loginRouter = require('./router/loginRouter');
@@ -24,20 +28,31 @@ mongoose.connect('mongodb://127.0.0.1:27017/users')
 
 // request parses
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({extended : true}));
+
 
 // parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 
 // routing setup
-app.use("/", loginRouter);
+app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);
-app.use("/signIn", signinRouter);
+app.use("/register", signinRouter);
 app.use("/ticket", ticketRouter);
 
+// google auth
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] }));
 
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.status(200).send("Hi all about ok")
+  });
 
 // 404 not found handaling 
 app.use(notFoundHandlar);
