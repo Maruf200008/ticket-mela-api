@@ -14,6 +14,8 @@ const usersRouter = require('./router/usersRouter');
 const moviesRouter = require('./router/moviesRouter');
 const signinRouter = require('./router/signInRouter');
 const ticketRouter = require('./router/ticketRouter');
+const homeRouter = require('./router/homeRouter');
+
 
 const app = express();
 dotenv.config();
@@ -28,7 +30,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/users')
 
 // request parses
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.urlencoded({extended : true}));
 
 
@@ -38,10 +40,14 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // routing setup
 app.use("/login", loginRouter);
+app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);
 app.use("/register", signinRouter);
 app.use("/ticket", ticketRouter);
+app.use("/home", homeRouter);
+
+
 
 // google auth
 app.get('/auth/google',

@@ -9,9 +9,7 @@ const User = require('../models/People')
 
 const getLogin = async (req, res, next) => {
     try {
-        const user = await User.findOne({ 
-            $or: [{email: req.body.email}, {mobile: req.body.mobile}, ],
-         });
+        const user = await User.findOne( {email: req.body.email});
         if (user && user?._id) {
             const isValidPassword = await bcrypt.compare(req.body.password, user.password);
             if (isValidPassword) {
@@ -47,7 +45,7 @@ const getLogin = async (req, res, next) => {
     } catch (err) {
         // Handle any potential errors, e.g., database query errors
         res.status(500).json({
-            errors : {
+            error : {
                 common : {
                     msg : err.message
                 }
@@ -58,7 +56,9 @@ const getLogin = async (req, res, next) => {
 
 const logOut = async(req, res, next) => {
     res.clearCookie(process.env.COOKIE_NAME)
-    res.send("Logged Out")
+    res.json({
+        message : "Logged Out"
+    })
 }
 module.exports = {
     getLogin,
