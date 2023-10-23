@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const cookieParser = require('cookie-parser');
 const {notFoundHandlar, errorHandlar} = require('./middlewares/common/errorHandlar')
-require('./auth')
+require('./passport')
 
 // router 
 const loginRouter = require('./router/loginRouter');
@@ -14,7 +14,8 @@ const usersRouter = require('./router/usersRouter');
 const moviesRouter = require('./router/moviesRouter');
 const signinRouter = require('./router/signInRouter');
 const ticketRouter = require('./router/ticketRouter');
-const homeRouter = require('./router/homeRouter');
+const googleRouter = require('./router/googleRoute');
+
 
 
 const app = express();
@@ -45,20 +46,8 @@ app.use("/users", usersRouter);
 app.use("/movies", moviesRouter);
 app.use("/register", signinRouter);
 app.use("/ticket", ticketRouter);
-app.use("/home", homeRouter);
+app.use("/auth", googleRouter);
 
-
-
-// google auth
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['email', 'profile'] }));
-
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.status(200).send("Hi all about ok")
-  });
 
 // 404 not found handaling 
 app.use(notFoundHandlar);
