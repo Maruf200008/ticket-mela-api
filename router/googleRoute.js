@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.get('/google/callback', passport.authenticate("google", {
     successRedirect : "/ticket",
-    failureRedirect : "/login"
+    failureRedirect : "/sdfsd"
 }))
 
 
-router.get('login/success', (req, res) => {
+router.get('/login/success', (req, res) => {
     console.log(req)
     if(req.user) {
         res.status(200).json({
@@ -18,6 +18,7 @@ router.get('login/success', (req, res) => {
         })
 
     }else {
+        
         res.status(403).json({
             message : "Not Authorized!!"
         })

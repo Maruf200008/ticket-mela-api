@@ -4,9 +4,12 @@ const dotenv = require('dotenv');
 const mongoose = require("mongoose");
 const cors = require('cors');
 
+
 const cookieParser = require('cookie-parser');
 const {notFoundHandlar, errorHandlar} = require('./middlewares/common/errorHandlar')
 require('./passport')
+
+
 
 // router 
 const loginRouter = require('./router/loginRouter');
@@ -15,6 +18,7 @@ const moviesRouter = require('./router/moviesRouter');
 const signinRouter = require('./router/signInRouter');
 const ticketRouter = require('./router/ticketRouter');
 const googleRouter = require('./router/googleRoute');
+const paymentRoute = require('./router/paymentRouter');
 
 
 
@@ -31,7 +35,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/users')
 
 // request parses
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'http://localhost:3000', methods : "GET, POST, PUT, DELETE", credentials: true }));
 app.use(express.urlencoded({extended : true}));
 
 
@@ -47,6 +51,10 @@ app.use("/movies", moviesRouter);
 app.use("/register", signinRouter);
 app.use("/ticket", ticketRouter);
 app.use("/auth", googleRouter);
+app.use("/payment", paymentRoute);
+
+
+
 
 
 // 404 not found handaling 
