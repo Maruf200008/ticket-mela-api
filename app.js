@@ -27,11 +27,7 @@ dotenv.config();
 
 process.env.APP_NAME;
 
-// database contection
 
-mongoose.connect('mongodb://127.0.0.1:27017/users')
-.then(() => console.log("Database Connect Successfully"))
-.catch((err) => console.log(err));
 
 // request parses
 app.use(express.json());

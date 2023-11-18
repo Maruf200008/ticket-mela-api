@@ -1,8 +1,6 @@
 const User = require('../models/People')
 
 const getUser =  async (req, res, next) => {
-    console.log(req.userName)
-    console.log(req.userId)
      const user = await User.find({name : "Mohammad Maruf"})
     .select({
         _id : 0,

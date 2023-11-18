@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
-const peopleSchema = mongoose.Schema({
+
+const db = mongoose.createConnection('mongodb+srv://mohammadmarufgazi:klD149njAQfGVrrn@cluster0.hygbszl.mongodb.net/peoples?retryWrites=true&w=majority');
+
+const userSchema =  new mongoose.Schema({
     name : {
         type : String,
         required : true,
@@ -23,8 +26,11 @@ const peopleSchema = mongoose.Schema({
 {
     timestamps : true
 }
+    
 )
 
-const People = mongoose.model("People", peopleSchema);
+const People = db.model("People", userSchema);
+
+
 
 module.exports = People

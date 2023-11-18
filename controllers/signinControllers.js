@@ -7,7 +7,7 @@ const createUser =  async (req, res, next) => {
     try {
         const hashPassword =  await bcrypt.hash(req.body.password, 10);
   
-        console.log(hashPassword)
+        
     const newUser = new People({
         name : req.body.name,
         email : req.body.email,
@@ -31,7 +31,7 @@ const createUser =  async (req, res, next) => {
     })
    
     const result = await newUser.save()
-    console.log(result)
+
     res.status(200).json({
         data : result,
         "access_token" : token,
