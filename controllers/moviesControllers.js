@@ -59,26 +59,12 @@ const moviesCatagories = async (req, res, next) => {
   }
 };
 
-const getSinglemovie = async (req, res, next) => {
-  console.log(req.params);
-  try {
-    const result = await Movies.find({ catagory: req.params.catagorie })
-    res.status(200).json({
-      data: result,
-    });
-  } catch {
-    res.status(500).json({
-      error: "Somthing is rong!",
-    });
-  }
-};
 
 
 const movieDetails = async (req, res, next) => {
   console.log(req.params.id);
   try {
     const result = await Movies.find({ _id: req.params.id })
-
     res.status(200).json({
       data: result,
     });
